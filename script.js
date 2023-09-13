@@ -1,13 +1,6 @@
-function calculateMinCost() {
-  //your code here
-  
-// Function to find the minimum cost to connect ropes
-function calculateMinCost(ropes) {
-    // Convert the input string of comma-separated integers to an array of integers
-    const ropeLengths = ropes.split(',').map(Number);
-
+function minCostToConnectRopes(arr) {
     // Create a min heap to store the rope lengths
-    const minHeap = new MinHeap(ropeLengths);
+    const minHeap = new MinHeap(arr);
 
     let totalCost = 0;
 
@@ -33,19 +26,23 @@ function calculateMinCost(ropes) {
 // MinHeap class for heap operations
 class MinHeap {
     constructor(arr = []) {
-        this.heap = [];
-        for (const element of arr) {
-            this.insert(element);
-        }
+        this.heap = arr;
+        this.buildHeap();
     }
 
     size() {
         return this.heap.length;
     }
 
+    buildHeap() {
+        for (let i = Math.floor(this.size() / 2); i >= 0; i--) {
+            this.heapifyDown(i);
+        }
+    }
+
     insert(value) {
         this.heap.push(value);
-        this.bubbleUp(this.heap.length - 1);
+        this.heapifyUp(this.size() - 1);
     }
 
     extractMin() {
@@ -59,11 +56,11 @@ class MinHeap {
 
         const minValue = this.heap[0];
         this.heap[0] = this.heap.pop();
-        this.bubbleDown(0);
+        this.heapifyDown(0);
         return minValue;
     }
 
-    bubbleUp(index) {
+    heapifyUp(index) {
         while (index > 0) {
             const parentIndex = Math.floor((index - 1) / 2);
             if (this.heap[index] < this.heap[parentIndex]) {
@@ -75,7 +72,7 @@ class MinHeap {
         }
     }
 
-    bubbleDown(index) {
+    heapifyDown(index) {
         while (true) {
             const leftIndex = 2 * index + 1;
             const rightIndex = 2 * index + 2;
@@ -105,13 +102,7 @@ class MinHeap {
     }
 }
 
-// Get the input element and result div
-const inputElement = document.getElementById('input');
-const resultDiv = document.getElementById('result');
-
-// Add an event listener to the input element
-inputElement.addEventListener('input', () => {
-    const inputText = inputElement.value;
-    const minimumCost = calculateMinCost(inputText);
-    resultDiv.innerText = `Minimum Cost: ${minimumCost}`;
-});
+// Example usage:
+const arr = [4, 2, 7, 6, 9];
+const minimumCost = minCostToConnectRopes(arr);
+console.log(minimumCost); // Output should be 62
